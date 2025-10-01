@@ -1,0 +1,14 @@
+<ul class="layout-menu">
+    <!-- Logo -->
+    <li class="menu-logo">
+        <a [routerLink]="['/']">
+            <img src="/logo.jpeg" alt="Sakai Logo" class="h-14 mr-2" />
+        </a>
+    </li>
+
+    <!-- Other Menu Items -->
+    <ng-container *ngFor="let item of model; let i = index">
+        <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
+        <li *ngIf="item.separator" class="menu-separator"></li>
+    </ng-container>
+</ul>
