@@ -1,7 +1,7 @@
 @use 'mixins' as *;
 
 .layout-sidebar {
-    position: fixed;
+    position: fixed;    
     width: 20rem;
     height: 100%;
     z-index: 999;
@@ -16,6 +16,37 @@
     border-radius: 0;
     padding: 0.5rem 1.5rem;
 }
+
+.layout-wrapper.layout-static .layout-sidebar {
+    @media (min-width: 992px) {
+        width: 6rem;
+        padding: 0.5rem;
+
+        .menu-logo {
+            a {
+                display: flex;
+                justify-content: center;
+                img {
+                    margin-right: 0;
+                }
+            }
+        }
+        .layout-menu {
+            .layout-menuitem-text, .layout-submenu-toggler {
+                display: none;
+            }
+
+            a {
+                .layout-menuitem-icon {
+                    font-size: 1.5rem;
+                    margin-right: 0;
+                }
+                justify-content: center;
+                padding: 1rem;
+            }
+        }
+    }
+}
     
 .layout-menu {
     margin: 0;
@@ -29,6 +60,12 @@
             font-weight: 700;
             color: var(--text-color);
             margin: 0.75rem 0;
+        }
+        
+        .layout-wrapper.layout-static & > .layout-menuitem-root-text {
+            @media (min-width: 992px) {
+                display: none;
+            }
         }
 
         > a {

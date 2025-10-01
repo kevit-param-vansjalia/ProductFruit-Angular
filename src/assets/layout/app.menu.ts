@@ -12,7 +12,7 @@ import { AppMenuitem } from './app.menuitem';
     <!-- Logo -->
     <li class="menu-logo">
         <a [routerLink]="['/']">
-            <img src="/logo.jpeg" alt="Sakai Logo" class="h-14 mr-2" />
+            <img src="assets/logo.jpeg" alt="Sakai Logo" class="h-14 mr-2" />
         </a>
     </li>
 
