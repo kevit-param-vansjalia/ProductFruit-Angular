@@ -42,18 +42,6 @@
             .layout-main-container {
                 margin-left: 20rem;
             }
-
-            &.layout-static-inactive {
-                .layout-sidebar {
-                    transform: translateX(-100%);
-                    left: 0;
-                }
-
-                .layout-main-container {
-                    margin-left: 0;
-                    
-                }
-            }
         }
 
         .layout-mask {
