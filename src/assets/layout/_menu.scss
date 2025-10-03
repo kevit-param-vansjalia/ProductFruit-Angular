@@ -29,11 +29,35 @@
                 display: flex;
                 justify-content: center;
                 img {
+                    width: 3.5rem;
+                    height: 3.5rem;
+                    object-fit: contain;
                     margin-right: 0;
                     margin-bottom: 3rem;
                 }
             }
         }
+        
+        .layout-menu-bottom {
+           
+
+            .theme-toggle, .user-avatar {
+                flex-direction: column;
+                justify-content: center;
+                padding: 1rem;
+                
+                .layout-menuitem-icon {
+                    font-size: 1.5rem;
+                    margin-right: 0;
+                    margin-bottom: 0.5rem;
+                }
+                
+                .layout-menuitem-text {
+                    font-size: 0.75rem;
+                }
+            }
+        }
+        
         .layout-menu {
             a {
                 flex-direction: column;
@@ -41,7 +65,6 @@
                     font-size: 1.5rem;
                     margin-right: 0;
                     margin-bottom: 0.5rem;
-                    
                 }
                 justify-content: center;
                 padding: 1rem;
@@ -49,15 +72,69 @@
         }
     }
 }
+
+.menu-logo {
+    a {
+        display: flex;
+        align-items: center;
+        img {
+            width: 3.5rem;
+            height: 3.5rem;
+            object-fit: contain;
+            margin-right: 0.5rem;
+        }
+    }
+}
+
+// Bottom section specific styles
+.layout-menu-bottom {
+    margin-top: auto;
+    border-top: 1px solid var(--surface-border);
+    padding-top: 1rem;
+    
+    .theme-toggle, .user-avatar {
+        display: flex;
+        align-items: center;
+        position: relative;
+        outline: 0 none;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 0.75rem 1rem;
+        border-radius: var(--content-border-radius);
+        transition:
+            background-color var(--element-transition-duration),
+            box-shadow var(--element-transition-duration);
+
+        .layout-menuitem-icon {
+            margin-right: 0.5rem;
+        }
+
+        &.active-route {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        &:hover {
+            background-color: var(--surface-hover);
+        }
+
+        &:focus {
+            @include focused-inset();
+        }
+    }
+    
+    .user-avatar {
+        margin-top: 0.25rem;
+    }
+}
     
 .layout-menu {
     margin: 0;
     padding: 0;
     list-style-type: none;
-    
-    .layout-root-menuitem-bottom {
-        margin-top: auto;
-    }
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     .layout-root-menuitem {
         > .layout-menuitem-root-text {

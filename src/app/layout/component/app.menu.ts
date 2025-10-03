@@ -8,7 +8,7 @@ import { LayoutService } from '../service/layout.service';
 @Component({
     selector: 'app-menu',
     standalone: true,
-    imports: [CommonModule, AppMenuitem, RouterModule, AppMenuitem],
+    imports: [CommonModule, AppMenuitem, RouterModule],
     templateUrl: './app.menu.html'
 })
 export class AppMenu {
@@ -52,25 +52,22 @@ export class AppMenu {
                         routerLink: ['/pages/empty']
                     },
                 ]
-            },
-            {
-                label: 'Get Started',
-                items: [
-                    {
-                        label: 'Toggle Theme',
-                        icon: this.layoutService.isDarkTheme() ? 'pi pi-sun' : 'pi pi-moon',
-                        command: () => {
-                            this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
-                        }
-                    },
-                    {
-                        label: 'User Avatar',
-                        icon: 'pi pi-fw pi-user',
-                        url: 'https://github.com/primefaces/sakai-ng',
-                        target: '_blank'
-                    }
-                ]
             }
         ];
+    }
+
+    // Theme toggle method
+    toggleTheme() {
+        this.layoutService.layoutConfig.update((state) => ({ 
+            ...state, 
+            darkTheme: !state.darkTheme 
+        }));
+    }
+
+    // User avatar click method
+    onUserClick() {
+        // Add your user profile logic here
+        console.log('User profile clicked');
+        // Example: open user profile menu or navigate to profile page
     }
 }

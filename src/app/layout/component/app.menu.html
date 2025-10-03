@@ -2,19 +2,28 @@
     <!-- Logo -->
     <li class="menu-logo">
         <a [routerLink]="['/']">
-            <img src="logo.jpeg" alt="Sakai Logo" class="h-14 mr-2" />
+            <img src="logo.jpeg" alt="Sakai Logo" />
         </a>
     </li>
 
     <!-- Main Menu Items -->
-    <ng-container *ngFor="let item of model.slice(0, -1); let i = index">
-        <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true" class="mb-4"></li>
+    <ng-container *ngFor="let item of model; let i = index">
+        <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true"></li>
         <li *ngIf="item.separator" class="menu-separator"></li>
     </ng-container>
 
-    <!-- Bottom Menu Items -->
-    <ng-container *ngFor="let item of model.slice(-1); let i = index">
-        <li app-menuitem *ngIf="!item.separator" [item]="item" [index]="i" [root]="true" class="layout-root-menuitem-bottom"></li>
-        <li *ngIf="item.separator" class="menu-separator"></li>
-    </ng-container>
+    <!-- Bottom Section - Separate Theme Toggle and User Avatar -->
+    <div class="layout-menu-bottom">
+        <!-- Theme Toggle -->
+        <div class="theme-toggle" (click)="toggleTheme()">
+            <i class="layout-menuitem-icon pi" [ngClass]="layoutService.isDarkTheme() ? 'pi-sun' : 'pi-moon'"></i>
+            <span class="layout-menuitem-text">{{ layoutService.isDarkTheme() ? 'Light Mode' : 'Dark Mode' }}</span>
+        </div>
+        
+        <!-- User Avatar -->
+        <div class="user-avatar" (click)="onUserClick()">
+            <i class="layout-menuitem-icon pi pi-user"></i>
+            <span class="layout-menuitem-text">User Profile</span>
+        </div>
+    </div>
 </ul>
