@@ -1,11 +1,13 @@
 @use 'mixins' as *;
 
 .layout-sidebar {
-    position: fixed;    
+    position: fixed;
     width: 20rem;
     height: 100%;
     z-index: 999;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between; // separates top & bottom
     overflow-y: auto;
     user-select: none;
     top: 0;
@@ -15,10 +17,10 @@
         left var(--layout-section-transition-duration);
     background-color: var(--surface-overlay);
     border-radius: 0;
-    flex-direction: column;
     padding: 0.5rem 1.5rem;
 }
 
+/* Static layout adjustment for larger screens */
 .layout-wrapper.layout-static .layout-sidebar {
     @media (min-width: 992px) {
         width: 10rem;
@@ -28,6 +30,7 @@
             a {
                 display: flex;
                 justify-content: center;
+
                 img {
                     width: 3.5rem;
                     height: 3.5rem;
@@ -37,46 +40,48 @@
                 }
             }
         }
-        
-        .layout-menu-bottom {
-           
 
-            .theme-toggle, .user-avatar {
+        .layout-menu-bottom {
+            .theme-toggle,
+            .user-avatar {
                 flex-direction: column;
                 justify-content: center;
                 padding: 1rem;
-                
+
                 .layout-menuitem-icon {
                     font-size: 1.5rem;
                     margin-right: 0;
                     margin-bottom: 0.5rem;
                 }
-                
+
                 .layout-menuitem-text {
                     font-size: 0.75rem;
                 }
             }
         }
-        
+
         .layout-menu {
             a {
                 flex-direction: column;
+                justify-content: center;
+                padding: 1rem;
+
                 .layout-menuitem-icon {
                     font-size: 1.5rem;
                     margin-right: 0;
                     margin-bottom: 0.5rem;
                 }
-                justify-content: center;
-                padding: 1rem;
             }
         }
     }
 }
 
+/* Logo styling */
 .menu-logo {
     a {
         display: flex;
         align-items: center;
+
         img {
             width: 3.5rem;
             height: 3.5rem;
@@ -86,13 +91,15 @@
     }
 }
 
-// Bottom section specific styles
+/* ------------------ MENU SECTIONS ------------------ */
+
+/* Bottom section */
 .layout-menu-bottom {
-    margin-top: auto;
     border-top: 1px solid var(--surface-border);
     padding-top: 1rem;
-    
-    .theme-toggle, .user-avatar {
+
+    .theme-toggle,
+    .user-avatar {
         display: flex;
         align-items: center;
         position: relative;
@@ -122,19 +129,20 @@
             @include focused-inset();
         }
     }
-    
+
     .user-avatar {
         margin-top: 0.25rem;
     }
 }
-    
+
+/* Main menu styling */
 .layout-menu {
     margin: 0;
     padding: 0;
-    list-style-type: none;
+    list-style-type: none; // removes default bullets
     display: flex;
     flex-direction: column;
-    height: 100%;
+    width: 100%;
 
     .layout-root-menuitem {
         > .layout-menuitem-root-text {
@@ -144,7 +152,7 @@
             color: var(--text-color);
             margin: 0.75rem 0;
         }
-        
+
         .layout-wrapper.layout-static & > .layout-menuitem-root-text {
             @media (min-width: 992px) {
                 display: none;
@@ -216,6 +224,7 @@
             }
         }
 
+        /* Nested levels indentation */
         ul {
             overflow: hidden;
             border-radius: var(--content-border-radius);
@@ -259,6 +268,7 @@
     }
 }
 
+/* Submenu animations */
 .layout-submenu-enter-from,
 .layout-submenu-leave-to {
     max-height: 0;
