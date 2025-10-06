@@ -14,9 +14,16 @@
     align-items: center;
 
     .layout-topbar-logo-container {
-        width: 20rem;
+        width: 100%;
         display: flex;
         align-items: center;
+        justify-content: space-between;
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        font-weight: 500;
+        color: var(--text-color);
     }
 
     .layout-topbar-logo {

@@ -1,11 +1,12 @@
 import { Component, Renderer2, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
 import { AppTopbar } from './app.topbar';
 import { AppSidebar } from './app.sidebar';
 import { AppFooter } from './app.footer';
 import { LayoutService } from '../service/layout.service';
+import { AppMenu } from './app.menu';
 
 @Component({
     selector: 'app-layout',
@@ -29,11 +30,14 @@ export class AppLayout {
 
     @ViewChild(AppSidebar) appSidebar!: AppSidebar;
 
+    @ViewChild(AppMenu) appMenu!: AppMenu;
+
     @ViewChild(AppTopbar) appTopBar!: AppTopbar;
 
     constructor(
         public layoutService: LayoutService,
         public renderer: Renderer2,
+        private route: ActivatedRoute,
         public router: Router
     ) {
         this.overlayMenuOpenSubscription = this.layoutService.overlayOpen$.subscribe(() => {
@@ -52,6 +56,7 @@ export class AppLayout {
 
         this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
             this.hideMenu();
+            this.updatePageTitle();
         });
     }
 
@@ -61,6 +66,26 @@ export class AppLayout {
         const eventTarget = event.target as Node;
 
         return !(sidebarEl?.isSameNode(eventTarget) || sidebarEl?.contains(eventTarget) || topbarEl?.isSameNode(eventTarget) || topbarEl?.contains(eventTarget));
+    }
+
+    updatePageTitle() {
+        const url = this.router.url;
+        let found = false;
+        const findTitle = (items: any[]) => {
+            for (const item of items) {
+                if (item.routerLink && item.routerLink[0] === url) {
+                    this.layoutService.pageTitle.set(item.label);
+                    found = true;
+                    return;
+                }
+                if (item.items) {
+                    findTitle(item.items);
+                    if (found) return;
+                }
+            }
+        };
+
+        findTitle(this.appMenu.model);
     }
 
     hideMenu() {

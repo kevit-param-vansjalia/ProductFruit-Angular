@@ -76,6 +76,8 @@ export class LayoutService {
 
     transitionComplete = signal<boolean>(false);
 
+    pageTitle = signal<string>('');
+
     private initialized = false;
 
     constructor() {
