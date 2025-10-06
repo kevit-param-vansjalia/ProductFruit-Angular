@@ -43,44 +43,26 @@ export class LayoutService {
     };
 
     layoutConfig = signal<layoutConfig>(this._config);
-
     layoutState = signal<LayoutState>(this._state);
 
     private configUpdate = new Subject<layoutConfig>();
-
     private overlayOpen = new Subject<any>();
-
     private menuSource = new Subject<MenuChangeEvent>();
-
     private resetSource = new Subject();
 
     menuSource$ = this.menuSource.asObservable();
-
     resetSource$ = this.resetSource.asObservable();
-
     configUpdate$ = this.configUpdate.asObservable();
-
     overlayOpen$ = this.overlayOpen.asObservable();
 
-    theme = computed(() => (this.layoutConfig()?.darkTheme ? 'light' : 'dark'));
-
-    isSidebarActive = computed(() => this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive);
-
-    isDarkTheme = computed(() => this.layoutConfig().darkTheme);
-
-    getPrimary = computed(() => this.layoutConfig().primary);
-
-    getSurface = computed(() => this.layoutConfig().surface);
-
-    isOverlay = computed(() => this.layoutConfig().menuMode === 'overlay');
-
-    transitionComplete = signal<boolean>(false);
-
+    // Signal for page title
     pageTitle = signal<string>('');
 
     private initialized = false;
+    transitionComplete = signal<boolean>(false);
 
     constructor() {
+        // React to config changes
         effect(() => {
             const config = this.layoutConfig();
             if (config) {
@@ -90,16 +72,69 @@ export class LayoutService {
 
         effect(() => {
             const config = this.layoutConfig();
-
             if (!this.initialized || !config) {
                 this.initialized = true;
                 return;
             }
-
             this.handleDarkModeTransition(config);
         });
     }
 
+    /*** Page title setter ***/
+    setPageTitle(title: string) {
+        this.pageTitle.set(title);
+    }
+
+    /*** Menu toggle logic ***/
+    onMenuToggle() {
+        if (this.isOverlay()) {
+            this.layoutState.update(prev => ({
+                ...prev,
+                overlayMenuActive: !prev.overlayMenuActive
+            }));
+
+            if (this.layoutState().overlayMenuActive) this.overlayOpen.next(null);
+        }
+
+        if (this.isDesktop()) {
+            this.layoutState.update(prev => ({
+                ...prev,
+                staticMenuDesktopInactive: !prev.staticMenuDesktopInactive
+            }));
+        } else {
+            this.layoutState.update(prev => ({
+                ...prev,
+                staticMenuMobileActive: !prev.staticMenuMobileActive
+            }));
+
+            if (this.layoutState().staticMenuMobileActive) this.overlayOpen.next(null);
+        }
+    }
+
+    /*** Utility ***/
+    isDesktop() {
+        return window.innerWidth > 991;
+    }
+
+    isMobile() {
+        return !this.isDesktop();
+    }
+
+    isOverlay = computed(() => this.layoutConfig().menuMode === 'overlay');
+
+    theme = computed(() => (this.layoutConfig()?.darkTheme ? 'light' : 'dark'));
+    isSidebarActive = computed(() => this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive);
+    isDarkTheme = computed(() => this.layoutConfig().darkTheme);
+    getPrimary = computed(() => this.layoutConfig().primary);
+    getSurface = computed(() => this.layoutConfig().surface);
+
+    /*** Config updates ***/
+    onConfigUpdate() {
+        this._config = { ...this.layoutConfig() };
+        this.configUpdate.next(this.layoutConfig());
+    }
+
+    /*** Dark mode transition handling ***/
     private handleDarkModeTransition(config: layoutConfig): void {
         if ((document as any).startViewTransition) {
             this.startViewTransition(config);
@@ -137,39 +172,7 @@ export class LayoutService {
         });
     }
 
-    onMenuToggle() {
-        if (this.isOverlay()) {
-            this.layoutState.update((prev) => ({ ...prev, overlayMenuActive: !this.layoutState().overlayMenuActive }));
-
-            if (this.layoutState().overlayMenuActive) {
-                this.overlayOpen.next(null);
-            }
-        }
-
-        if (this.isDesktop()) {
-            this.layoutState.update((prev) => ({ ...prev, staticMenuDesktopInactive: !this.layoutState().staticMenuDesktopInactive }));
-        } else {
-            this.layoutState.update((prev) => ({ ...prev, staticMenuMobileActive: !this.layoutState().staticMenuMobileActive }));
-
-            if (this.layoutState().staticMenuMobileActive) {
-                this.overlayOpen.next(null);
-            }
-        }
-    }
-
-    isDesktop() {
-        return window.innerWidth > 991;
-    }
-
-    isMobile() {
-        return !this.isDesktop();
-    }
-
-    onConfigUpdate() {
-        this._config = { ...this.layoutConfig() };
-        this.configUpdate.next(this.layoutConfig());
-    }
-
+    /*** Menu and reset events ***/
     onMenuStateChange(event: MenuChangeEvent) {
         this.menuSource.next(event);
     }

@@ -9,12 +9,15 @@ export const appRoutes: Routes = [
         path: '',
         component: AppLayout,
         children: [
-            { path: '', component: Dashboard },
-            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
+            { path: '', component: Dashboard, data: { title: 'Dashboard' } },
+            { 
+                path: 'pages', 
+                loadChildren: () => import('./app/pages/pages.routes') 
+            }
         ]
     },
-    { path: 'landing', component: Landing },
-    { path: 'notfound', component: Notfound },
+    { path: 'landing', component: Landing, data: { title: 'Landing' } },
+    { path: 'notfound', component: Notfound, data: { title: 'Not Found' } },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
     { path: '**', redirectTo: '/notfound' }
 ];
